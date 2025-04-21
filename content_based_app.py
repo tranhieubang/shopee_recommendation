@@ -117,7 +117,7 @@ with st.sidebar:
     )
 
     st.markdown("<hr style='margin-top:20px; margin-bottom:10px;'>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center; font-size:13px; color:gray;'>© 2025 Customer Segmentation Project</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center; font-size:13px; color:gray;'>© 2025 Recommendation System Project</p>", unsafe_allow_html=True)
 
 
 # TF-IDF cho mô tả
