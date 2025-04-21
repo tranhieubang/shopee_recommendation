@@ -22,11 +22,10 @@ def load_csv_from_gdrive(file_id, dest_path="products.csv"):
     return pd.read_csv(dest_path)
 
 # File ID CSV sản phẩm từ Google Drive
-file_id = "1AcAptP7UxnNxDUZZ5fJha0XmoEdL4OE3" 
-df_products = load_csv_from_gdrive(file_id)
+df_products = load_csv_from_gdrive("1AcAptP7UxnNxDUZZ5fJha0XmoEdL4OE3")
 
 # Thêm dữ liệu đánh giá người dùng
-#rating_df = pd.read_csv("/mnt/data/Products_ThoiTrangNam_rating_raw.csv")
+rating_df = load_csv_from_gdrive("1KNSlOnJnykrPeS2FAJRcZ2v0AED8eN6n")
 
 # Chuẩn bị dữ liệu cho EDA
 subcat_counts = df_products['sub_category'].value_counts().reset_index()
