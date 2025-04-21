@@ -8,6 +8,7 @@ import os
 import matplotlib.pyplot as plt
 import plotly.express as px
 from wordcloud import WordCloud
+import gdown
 
 # Cấu hình giao diện
 st.set_page_config(page_title="Recommendation System", layout="wide")
@@ -128,7 +129,7 @@ def get_recommendations_by_description(input_text, topn=5):
     top_indices = sim_scores.argsort()[::-1][:topn]
     return df_products.iloc[top_indices]
 
-import gdown
+
 
 # Thêm dictionary cosine_drive_ids ngay trước hoặc sau khi import gdown
 cosine_drive_ids = {
