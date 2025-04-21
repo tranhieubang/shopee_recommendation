@@ -376,30 +376,30 @@ if choice == "Recommendation":
         user_id_int = None
     
         if user_id_input:
-        try:
-            user_id_int = int(user_id_input)
-            user_match = merged_df[merged_df['user_id'] == user_id_int]
-
-            if not user_match.empty:
-                user_name_display = user_match['user'].iloc[0]
-                st.info(f"👤 Người dùng: **{user_name_display}**")
-            else:
-                st.warning(f"🚫 `user_id` {user_id_int} chưa có trong dữ liệu.")
-                new_user_name = st.text_input("✍ Nhập tên người dùng mới để thêm:")
-                if new_user_name:
-                    # Thêm tạm thời vào merged_df để hiển thị luôn
-                    new_entry = pd.DataFrame([{
-                        'user_id': user_id_int,
-                        'user': new_user_name,
-                        'product_id': np.nan,
-                        'rating': np.nan
-                    }])
-                    merged_df = pd.concat([merged_df, new_entry], ignore_index=True)
-                    st.success(f"✅ Đã thêm người dùng mới: **{new_user_name}** (ID: {user_id_int})")
-                    user_name_display = new_user_name
-
-        except ValueError:
-            st.error("❌ Vui lòng nhập `user_id` là số nguyên.")
+            try:
+                user_id_int = int(user_id_input)
+                user_match = merged_df[merged_df['user_id'] == user_id_int]
+    
+                if not user_match.empty:
+                    user_name_display = user_match['user'].iloc[0]
+                    st.info(f"👤 Người dùng: **{user_name_display}**")
+                else:
+                    st.warning(f"🚫 `user_id` {user_id_int} chưa có trong dữ liệu.")
+                    new_user_name = st.text_input("✍ Nhập tên người dùng mới để thêm:")
+                    if new_user_name:
+                        # Thêm tạm thời vào merged_df để hiển thị luôn
+                        new_entry = pd.DataFrame([{
+                            'user_id': user_id_int,
+                            'user': new_user_name,
+                            'product_id': np.nan,
+                            'rating': np.nan
+                        }])
+                        merged_df = pd.concat([merged_df, new_entry], ignore_index=True)
+                        st.success(f"✅ Đã thêm người dùng mới: **{new_user_name}** (ID: {user_id_int})")
+                        user_name_display = new_user_name
+    
+            except ValueError:
+                st.error("❌ Vui lòng nhập `user_id` là số nguyên.")
 
     # Gợi ý sản phẩm nếu user_id hợp lệ
     if user_id_int is not None:
