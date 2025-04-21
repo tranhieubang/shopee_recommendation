@@ -22,10 +22,14 @@ def load_csv_from_gdrive(file_id, dest_path="products.csv"):
     return pd.read_csv(dest_path)
 
 # File ID CSV sản phẩm từ Google Drive
-df_products = load_csv_from_gdrive("1AcAptP7UxnNxDUZZ5fJha0XmoEdL4OE3")
+product_file_id = "1AcAptP7UxnNxDUZZ5fJha0XmoEdL4OE3"
+rating_file_id = "1KNSlOnJnykrPeS2FAJRcZ2v0AED8eN6n"
 
-# Thêm dữ liệu đánh giá người dùng
-rating_df = load_csv_from_gdrive("1KNSlOnJnykrPeS2FAJRcZ2v0AED8eN6n")
+df_products = load_csv_from_gdrive(product_file_id, dest_path="products.csv")
+rating_df = load_csv_from_gdrive(rating_file_id, dest_path="ratings.csv")
+
+# Gộp dữ liệu đánh giá vào dữ liệu sản phẩm
+merged_df = pd.merge(rating_df, df_products, how='left', on='product_id')
 
 # Chuẩn bị dữ liệu cho EDA
 subcat_counts = df_products['sub_category'].value_counts().reset_index()
