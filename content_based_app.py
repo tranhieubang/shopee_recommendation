@@ -35,6 +35,14 @@ rating_df.columns = rating_df.columns.str.strip().str.lower()
 
 # Gộp dữ liệu đánh giá vào dữ liệu sản phẩm
 merged_df = pd.merge(rating_df, df_products, how='left', on='product_id')
+# Gộp dữ liệu đánh giá vào sản phẩm
+merged_df = pd.merge(rating_df, df_products, how='left', on='product_id')
+
+# Nếu có xung đột cột rating => đổi tên lại cho rõ ràng
+if 'rating_x' in merged_df.columns:
+    merged_df.rename(columns={'rating_x': 'rating'}, inplace=True)
+elif 'rating_y' in merged_df.columns:
+    merged_df.rename(columns={'rating_y': 'rating'}, inplace=True)
 
 st.write("Cột merged_df:", merged_df.columns.tolist())
 st.write("5 dòng đầu merged_df:", merged_df.head())
