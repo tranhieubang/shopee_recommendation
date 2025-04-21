@@ -218,6 +218,22 @@ def get_recommendations(df, ma_san_pham, nums=5):
     product_indices = [i[0] for i in sim_scores]
     return df.iloc[product_indices]
 
+# Gợi ý theo user_id
+
+def get_recommendations_by_user(user_id, topn=5):
+    if user_id not in rating_df['user_id'].values:
+        st.warning("Không tìm thấy user_id trong dữ liệu.")
+        return pd.DataFrame()
+
+    user_rated = rating_df[rating_df['user_id'] == user_id]
+    user_rated = user_rated.sort_values(by='rating', ascending=False)
+
+    for pid in user_rated['product_id'].values:
+        recs = get_recommendations(df_products, pid, nums=topn)
+        if not recs.empty:
+            return recs
+    return pd.DataFrame()
+
 # Hiển thị sản phẩm dạng card
 def display_recommended_products(recommended_products, cols=3):
     st.markdown("""
