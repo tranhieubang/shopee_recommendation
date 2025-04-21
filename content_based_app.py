@@ -184,6 +184,8 @@ cosine_drive_ids = {
     48: "1bl7e7WBv6CdFgr4eqFz3cIGEdHPg2H4i"
 }
 def download_cosine_batch_from_drive(file_id, local_path):
+    # Tạo thư mục nếu chưa tồn tại
+    os.makedirs(os.path.dirname(local_path), exist_ok=True)
     if not os.path.exists(local_path):
         url = f"https://drive.google.com/uc?id={file_id}"
         gdown.download(url, local_path, quiet=False)
@@ -213,7 +215,7 @@ def load_cosine_batch(index, batch_size=1000):
         download_cosine_batch_from_drive(file_id, local_file)
         return np.load(local_file)[row_index]
     else:
-        st.error(f"\u274c Không t\u00ecm th\u1ea5y file ID cho batch {batch_idx}")
+        st.error(f"❌ Không tìm thấy file ID cho batch {batch_idx}")
         return np.zeros(df_products.shape[0])
 
 def download_cosine_batch_from_drive(file_id, local_path):
