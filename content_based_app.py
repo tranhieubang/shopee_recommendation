@@ -36,6 +36,8 @@ rating_df.columns = rating_df.columns.str.strip().str.lower()
 # Gộp dữ liệu đánh giá vào dữ liệu sản phẩm
 merged_df = pd.merge(rating_df, df_products, how='left', on='product_id')
 
+st.write("Cột merged_df:", merged_df.columns.tolist())
+st.write("5 dòng đầu merged_df:", merged_df.head())
 
 # Chuẩn bị dữ liệu cho EDA
 subcat_counts = df_products['sub_category'].value_counts().reset_index()
