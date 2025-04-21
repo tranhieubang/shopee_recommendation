@@ -126,6 +126,83 @@ def get_recommendations_by_description(input_text, topn=5):
     top_indices = sim_scores.argsort()[::-1][:topn]
     return df_products.iloc[top_indices]
 
+import gdown
+
+# ... (phần trên giữ nguyên)
+
+# Thêm dictionary cosine_drive_ids ngay trước hoặc sau khi import gdown
+cosine_drive_ids = {
+    0: "1XBMWsYWVVnjXqQHkpwDkq-p_9dovTxna",
+    1: "1l6t3wnB5MxtBYN0Y-ZJ6h0J4mbSqypka",
+    2: "1nd_H297Mx3YVhdrncHrtyvUjZj9OhPF5",
+    3: "1WdGArCoVyReL_nzaTrcfk-R-iZujKlVR",
+    4: "1DtVpp3ku49BB1vjlwIB307XfAfbK-g6v",
+    5: "1MK6kIt18iJRLk0YSG982GICaK5x-Y5-N",
+    6: "1zKjtMZS6cWJYfmG0yOORzcMDWE2fE4Xl",
+    7: "1Lv37eMlnxcmjTqHxYSqdrRkRJY5Ajzcs",
+    8: "1wYhi5WXQ21xLsLCLR0bTFNOXnyYIm1iP",
+    9: "1OU5W8IvhzTyb_uo62IzRSiVkW64RB1rs",
+    10: "1pB2bwjfO2o4zwPQ2LyNgOrA8f6LUVc2F",
+    11: "11tAeIyGn3-oWVaphDrWEQZN2TJhYBD3P",
+    12: "1jLIOeR214pDlqKhBKtUZrhdU_RL7eAmd",
+    13: "18hCj847VEcb_BWJ50dr-o-_Sd1eSbgAu",
+    14: "1--cll4b49o-b4zR8pt8N0akNyzCIPDWX",
+    15: "1CCUPkajJiKS6OEUM-09BoKNQslxhtki3",
+    16: "1cYqpNWMbpw6BBKoj1WGLbMS_xe5UaDm0",
+    17: "19PtZr-oJeST_yoZiTMFkNeev6mLfkpWs",
+    18: "1GlsQo79zWn_W-2N3svFr9iGqK0LFRxwC",
+    19: "1k6ZpzKyyhRpvb3ECw34JEuv_tvNOwinl",
+    20: "1Yg5r8otCqyMcwVLeMXAEJvbJ2rxkxYjd",
+    21: "1n-hCD3Z0Xu54nvs4Mr8lWzzXFvnDenhf",
+    22: "1gjqrpPFHp3Mk3-8a20oTy5pSRGfrFNho",
+    23: "1erLK5AasV8ocn_ln4gzRAHjVdkNRruJ5",
+    24: "1f7uYk5iXURoTT38BXpcw1SF4Kw981kJE",
+    25: "1llPFJ12YGjbC0KPZYnZ4B5U4UaMLeZ1V",
+    26: "11M2-m1pnYTT0Z_JTfUkg0LdQ3KTwFBkr",
+    27: "1OgCLPj8w3FUnuTkF-wU3ZA5icI_d7BSk",
+    28: "1slYwDtfaCMG1T2m3lHhxfW7mSbFjA2FK",
+    29: "1LlhXpdkKtxFn1f1ykfLgcY5r5jAetGlX",
+    30: "1ND-9gui2hrkihVCorYPjXLCa87cvQxK4",
+    31: "1lDynO50HOfyfS642Eu905ETZBGbdymeK",
+    32: "1RKXbiOqFVGxx7ipfRUljaC6VkuNwZRLk",
+    33: "1uyKp6b3W9yHsDtN44E8zl7l9BZxGzT3e",
+    34: "16bycQO2CUyUT6amlifw7CSN-5yIvpH5f",
+    35: "1w839A81ERhjmQFptQiZZeuSgnGAN9aBD",
+    36: "1PtaQDMT4FsWdpVP61oU3Gdbs_4GC4vrf",
+    37: "14CHqtUeWkosv_PPqbTdtfAs-mbDNF7_j",
+    38: "1vV8SSCJkkKPpYioJtV2ab8Vci126gm88",
+    39: "1cS5HAKSYjRoOIhwFTZOcgyEO8IRk_PRI",
+    40: "1vQYnNiSPt8YewS_YcVTOenEahrleYX4H",
+    41: "1DY5XkSzbiRFpLFgq2pSFUOPvBZPJV_2f",
+    42: "1m_FypIAD_XWk8fhuiYAglYvQTfShcmlG",
+    43: "1RPfE-2NW9be8PW6_8Ey6z47Zef41qImI",
+    44: "1ewVTk8-irgA2upr2jbuhcOWHZSKcZoLb",
+    45: "1c6qqjBP4COAznQD_otncKet1Lc3kA2YJ",
+    46: "1km1wpcosQ4YQqKlnh2V8LmDQUu_nBxch",
+    47: "1XLWEBl7K5qZnFc26WfBmSLUevv8VL_3-",
+    48: "1bl7e7WBv6CdFgr4eqFz3cIGEdHPg2H4i"
+}
+
+# Cập nhật load_cosine_batch để tự động tải từ Google Drive nếu chưa có file local
+
+def load_cosine_batch(index, batch_size=1000):
+    batch_idx = index // batch_size
+    row_index = index % batch_size
+    local_file = f"cosine_batches/cosine_batch_{batch_idx}.npy"
+
+    file_id = cosine_drive_ids.get(batch_idx)
+    if file_id:
+        download_cosine_batch_from_drive(file_id, local_file)
+        return np.load(local_file)[row_index]
+    else:
+        st.error(f"\u274c Không t\u00ecm th\u1ea5y file ID cho batch {batch_idx}")
+        return np.zeros(df_products.shape[0])
+
+def download_cosine_batch_from_drive(file_id, local_path):
+    if not os.path.exists(local_path):
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, local_path, quiet=False)
+
 # Load batch cosine theo product_id
 def load_cosine_batch(index, batch_size=1000):
     batch_file = f"cosine_batches/cosine_batch_{index // batch_size}.npy"
