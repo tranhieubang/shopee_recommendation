@@ -28,6 +28,9 @@ rating_file_id = "1KNSlOnJnykrPeS2FAJRcZ2v0AED8eN6n"
 df_products = load_csv_from_gdrive(product_file_id, dest_path="products.csv")
 rating_df = load_csv_from_gdrive(rating_file_id, dest_path="ratings.csv")
 
+df_products.columns = df_products.columns.str.strip().str.lower()
+rating_df.columns = rating_df.columns.str.strip().str.lower()
+
 # Gộp dữ liệu đánh giá vào dữ liệu sản phẩm
 merged_df = pd.merge(rating_df, df_products, how='left', on='product_id')
 
