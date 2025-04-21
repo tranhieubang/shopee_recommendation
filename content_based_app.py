@@ -367,7 +367,12 @@ if choice == "Recommendation":
             st.info("Hãy nhập mô tả sản phẩm để nhận gợi ý.")
 
     elif method == "Theo người dùng (user_id)":
-        user_id_input = st.text_input("Nhập user_id để xem gợi ý:")
+        st.markdown("#### 📋 Danh sách một số người dùng mẫu")
+        st.dataframe(
+        merged_df[['user_id', 'user']].drop_duplicates().head(10).reset_index(drop=True)
+    )
+
+        user_id_input = st.text_input("🔍 Nhập `user_id` để xem gợi ý:")
         if user_id_input:
             try:
                 user_id_int = int(user_id_input)
