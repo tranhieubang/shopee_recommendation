@@ -205,31 +205,6 @@ def load_cosine_batch(index, batch_size=1000):
         return np.zeros(df_products.shape[0])
 # Cập nhật load_cosine_batch để tự động tải từ Google Drive nếu chưa có file local
 
-def load_cosine_batch(index, batch_size=1000):
-    batch_idx = index // batch_size
-    row_index = index % batch_size
-    local_file = f"cosine_batches/cosine_batch_{batch_idx}.npy"
-
-    file_id = cosine_drive_ids.get(batch_idx)
-    if file_id:
-        download_cosine_batch_from_drive(file_id, local_file)
-        return np.load(local_file)[row_index]
-    else:
-        st.error(f"❌ Không tìm thấy file ID cho batch {batch_idx}")
-        return np.zeros(df_products.shape[0])
-
-def download_cosine_batch_from_drive(file_id, local_path):
-    if not os.path.exists(local_path):
-        url = f"https://drive.google.com/uc?id={file_id}"
-        gdown.download(url, local_path, quiet=False)
-
-# Load batch cosine theo product_id
-def load_cosine_batch(index, batch_size=1000):
-    batch_file = f"cosine_batches/cosine_batch_{index // batch_size}.npy"
-    batch = np.load(batch_file)
-    row_index = index % batch_size
-    return batch[row_index]
-
 def get_recommendations(df, ma_san_pham, nums=5):
     matching_indices = df.index[df['product_id'] == ma_san_pham].tolist()
     if not matching_indices:
