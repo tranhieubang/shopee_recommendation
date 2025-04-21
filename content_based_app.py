@@ -15,24 +15,27 @@ st.set_page_config(page_title="Recommendation System", layout="wide")
 
 # Đọc dữ liệu
 # Tải dữ liệu từ Google Drive nếu chưa có
-def load_csv_from_gdrive(file_id, dest_path="products.csv"):
+def load_csv_from_gdrive(file_id, dest_path="data.csv", sep=","):
     if not os.path.exists(dest_path):
         url = f"https://drive.google.com/uc?id={file_id}"
         gdown.download(url, dest_path, quiet=False)
-    return pd.read_csv(dest_path)
+    return pd.read_csv(dest_path, sep=sep)
 
 # File ID CSV sản phẩm từ Google Drive
 product_file_id = "1AcAptP7UxnNxDUZZ5fJha0XmoEdL4OE3"
 rating_file_id = "1KNSlOnJnykrPeS2FAJRcZ2v0AED8eN6n"
 
+# Đọc dữ liệu (file đánh giá dùng tab-separated)
 df_products = load_csv_from_gdrive(product_file_id, dest_path="products.csv")
-rating_df = load_csv_from_gdrive(rating_file_id, dest_path="ratings.csv")
+rating_df = load_csv_from_gdrive(rating_file_id, dest_path="ratings.csv", sep="\t")
 
+# Chuẩn hóa tên cột
 df_products.columns = df_products.columns.str.strip().str.lower()
 rating_df.columns = rating_df.columns.str.strip().str.lower()
 
 # Gộp dữ liệu đánh giá vào dữ liệu sản phẩm
 merged_df = pd.merge(rating_df, df_products, how='left', on='product_id')
+
 
 # Chuẩn bị dữ liệu cho EDA
 subcat_counts = df_products['sub_category'].value_counts().reset_index()
