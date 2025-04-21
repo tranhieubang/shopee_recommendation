@@ -26,7 +26,7 @@ file_id = "1AcAptP7UxnNxDUZZ5fJha0XmoEdL4OE3"
 df_products = load_csv_from_gdrive(file_id)
 
 # Thêm dữ liệu đánh giá người dùng
-rating_df = pd.read_csv("/mnt/data/Products_ThoiTrangNam_rating_raw.csv")
+#rating_df = pd.read_csv("/mnt/data/Products_ThoiTrangNam_rating_raw.csv")
 
 # Chuẩn bị dữ liệu cho EDA
 subcat_counts = df_products['sub_category'].value_counts().reset_index()
@@ -105,7 +105,7 @@ with st.sidebar:
     st.markdown("### 👤 Thông tin nhóm")
     st.markdown(
         """
-        <div style='background-color: #f4f6fa; padding: 15px; border-radius: 10px; font-size: 15px; line-height: 1.6;'>
+        <div style='background-color: #f4f6fa; padding: 15px; border-radius: 10px; font-size: 15px; line-height: 1.6;color: gray;'>
             🏅 <b>Thực hiện bởi:</b><br>
             <span style='font-weight: 500;'>Mai Hồng Hà & Trần Hiếu Băng</span><br><br>
             👩‍🏫 <b>Giảng viên:</b><br>
