@@ -358,7 +358,7 @@ elif choice == "Overview":
     </div>
     """, unsafe_allow_html=True)
 
-    st.image("C:\\Users\\LENOVO\\OneDrive\\Pictures\\Bigdata\\GUI_Project\\GUI_Cosine_similarity_model\\1-shopee-2024-mot-nam-nhin-lai20250111142551.png", width=800)
+    st.image("1-shopee-2024-mot-nam-nhin-lai20250111142551.png", width=800)
 
     st.markdown("<h3 style='color:#1f77b4;'>Vấn đề đặt ra:</h3>", unsafe_allow_html=True)
     st.markdown("""
