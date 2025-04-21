@@ -363,16 +363,12 @@ if choice == "Recommendation":
             st.info("Hãy nhập mô tả sản phẩm để nhận gợi ý.")
 
     elif method == "Theo người dùng (user_id)":
-        st.markdown("#### 📋 Danh sách người dùng mẫu")
-        user_list = merged_df[['user_id', 'user']].drop_duplicates().sort_values('user_id')
-        user_options = user_list.apply(lambda x: f"{x['user_id']} - {x['user']}", axis=1).tolist()
+        st.markdown("#### 📋 Danh sách một số người dùng mẫu")
+        st.dataframe(
+            merged_df[['user_id', 'user']].drop_duplicates().head(3).reset_index(drop=True)
+        )
         nums = st.slider("Số lượng sản phẩm muốn đề xuất", min_value=1, max_value=10, value=3)
-    
-        selected_user = st.selectbox("🔽 Chọn từ danh sách", options=user_options)
-        selected_user_id = int(selected_user.split(" - ")[0])
-    
-        st.markdown("---")
-        user_id_input = st.text_input("✏️ Hoặc nhập `user_id` bất kỳ:", value=str(selected_user_id))
+        user_id_input = st.text_input("🔍 Nhập `user_id` để xem gợi ý:")
     
         user_name_display = ""
         user_id_int = None
@@ -384,11 +380,12 @@ if choice == "Recommendation":
     
                 if not user_match.empty:
                     user_name_display = user_match['user'].iloc[0]
-                    st.success(f"👤 Người dùng: **{user_name_display}** (ID: {user_id_int})")
+                    st.info(f"👤 Người dùng: **{user_name_display}**")
                 else:
                     st.warning(f"🚫 `user_id` {user_id_int} chưa có trong dữ liệu.")
-                    new_user_name = st.text_input("📌 Nhập tên người dùng mới để thêm:")
+                    new_user_name = st.text_input("✍ Nhập tên người dùng mới để thêm:")
                     if new_user_name:
+                        # Thêm tạm thời vào merged_df để hiển thị luôn
                         new_entry = pd.DataFrame([{
                             'user_id': user_id_int,
                             'user': new_user_name,
@@ -402,13 +399,15 @@ if choice == "Recommendation":
             except ValueError:
                 st.error("❌ Vui lòng nhập `user_id` là số nguyên.")
     
+        # Gợi ý sản phẩm nếu user_id hợp lệ
         if user_id_int is not None:
-            st.markdown(f"### 🎯 Gợi ý cho `{user_name_display}` (ID: {user_id_int})")
+            st.markdown(f"### 📦 Gợi ý cho người dùng `{user_id_int}`: **{user_name_display}**")
             recommended_by_user = get_recommendations_by_user(user_id_int)
             if not recommended_by_user.empty:
                 display_recommended_products(recommended_by_user)
             else:
                 st.info("Không tìm thấy sản phẩm gợi ý cho người dùng này.")
+    
 
 
 elif choice == "Overview":
