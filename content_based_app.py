@@ -227,11 +227,11 @@ def get_recommendations(df, ma_san_pham, nums=5):
 # Gợi ý theo user_id
 
 def get_recommendations_by_user(user_id, topn=5):
-    if user_id not in rating_df['user_id'].values:
+    if user_id not in merged_df['user_id'].values:
         st.warning("Không tìm thấy user_id trong dữ liệu.")
         return pd.DataFrame()
 
-    user_rated = rating_df[rating_df['user_id'] == user_id]
+    user_rated = merged_df[merged_df['user_id'] == user_id]
     user_rated = user_rated.sort_values(by='rating', ascending=False)
 
     for pid in user_rated['product_id'].values:
@@ -239,7 +239,7 @@ def get_recommendations_by_user(user_id, topn=5):
         if not recs.empty:
             return recs
     return pd.DataFrame()
-
+    
 # Hiển thị sản phẩm dạng card
 def display_recommended_products(recommended_products, cols=3):
     st.markdown("""
