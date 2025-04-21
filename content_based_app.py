@@ -13,8 +13,14 @@ from wordcloud import WordCloud
 st.set_page_config(page_title="Recommendation System", layout="wide")
 
 # Đọc dữ liệu
-path = 'C:\\Users\\LENOVO\\OneDrive\\Pictures\\Bigdata\\GUI_Project\\GUI_Cosine_similarity_model\\Products_ThoiTrangNam_raw.csv'
-df_products = pd.read_csv(path)
+def load_csv_from_gdrive(file_id):
+    # Tạo link để tải file dạng CSV
+    download_url = f"https://drive.google.com/file/d/1AcAptP7UxnNxDUZZ5fJha0XmoEdL4OE3/view?usp=sharing"
+    return pd.read_csv(download_url)
+
+# Thay thế đường dẫn cũ bằng cách đọc từ Google Drive
+file_id = "1AcAptP7UxnNxDUZZ5fJha0XmoEdL4OE3" 
+df_products = load_csv_from_gdrive(file_id)
 
 # Chuẩn bị dữ liệu cho EDA
 subcat_counts = df_products['sub_category'].value_counts().reset_index()
