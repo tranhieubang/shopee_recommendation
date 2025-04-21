@@ -314,7 +314,7 @@ if choice == "Recommendation":
     #st.image("C:\\Users\\LENOVO\\OneDrive\\Pictures\\Bigdata\\GUI_Project\\GUI_Cosine_similarity_model\\hinh.png")
 
     st.subheader("🔀 Chọn phương thức đề xuất")
-    method = st.radio("Chọn cách bạn muốn hệ thống gợi ý sản phẩm:", ["Theo mô tả", "Theo sản phẩm đã chọn"])
+    method = st.radio("Chọn cách bạn muốn hệ thống gợi ý sản phẩm:", ["Theo mô tả", "Theo sản phẩm đã chọn", "Theo người dùng (user_id)"])
 
     if method == "Theo sản phẩm đã chọn":
         product_options = [(row['product_name'], row['product_id']) for _, row in df_products.head(10).iterrows()]
@@ -405,3 +405,20 @@ elif choice == "Product Insights":
         st.markdown("### 💸 Phân tích giá sản phẩm")
         st.plotly_chart(fig_price_dist, use_container_width=True)
         st.plotly_chart(fig_avg_price, use_container_width=True)
+    elif method == "Theo người dùng (user_id)":
+        user_input = st.text_input("Nhập user_id để hệ thống gợi ý sản phẩm:")
+        nums = st.slider("Số lượng sản phẩm muốn đề xuất", min_value=1, max_value=10, value=3)
+
+        if user_input:
+            try:
+                user_id = int(user_input)
+                recommendations = get_recommendations_by_user(user_id, topn=nums)
+                if not recommendations.empty:
+                    st.write("##### Các sản phẩm hệ thống gợi ý cho bạn:")
+                    display_recommended_products(recommendations, cols=3)
+                else:
+                    st.info("Người dùng này chưa có đánh giá sản phẩm nào đủ để gợi ý.")
+            except ValueError:
+                st.error("Vui lòng nhập user_id là một số nguyên.")
+        else:
+            st.info("Hãy nhập user_id để xem đề xuất.")
