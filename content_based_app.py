@@ -13,12 +13,14 @@ from wordcloud import WordCloud
 st.set_page_config(page_title="Recommendation System", layout="wide")
 
 # Đọc dữ liệu
-def load_csv_from_gdrive(file_id):
-    # Tạo link để tải file dạng CSV
-    download_url = f"https://drive.google.com/file/d/1AcAptP7UxnNxDUZZ5fJha0XmoEdL4OE3/view?usp=sharing"
-    return pd.read_csv(download_url)
+# Tải dữ liệu từ Google Drive nếu chưa có
+def load_csv_from_gdrive(file_id, dest_path="products.csv"):
+    if not os.path.exists(dest_path):
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, dest_path, quiet=False)
+    return pd.read_csv(dest_path)
 
-# Thay thế đường dẫn cũ bằng cách đọc từ Google Drive
+# File ID CSV sản phẩm từ Google Drive
 file_id = "1AcAptP7UxnNxDUZZ5fJha0XmoEdL4OE3" 
 df_products = load_csv_from_gdrive(file_id)
 
@@ -128,8 +130,6 @@ def get_recommendations_by_description(input_text, topn=5):
 
 import gdown
 
-# ... (phần trên giữ nguyên)
-
 # Thêm dictionary cosine_drive_ids ngay trước hoặc sau khi import gdown
 cosine_drive_ids = {
     0: "1XBMWsYWVVnjXqQHkpwDkq-p_9dovTxna",
@@ -182,7 +182,24 @@ cosine_drive_ids = {
     47: "1XLWEBl7K5qZnFc26WfBmSLUevv8VL_3-",
     48: "1bl7e7WBv6CdFgr4eqFz3cIGEdHPg2H4i"
 }
+def download_cosine_batch_from_drive(file_id, local_path):
+    if not os.path.exists(local_path):
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, local_path, quiet=False)
 
+# Load batch cosine từ Google Drive nếu chưa có local file
+def load_cosine_batch(index, batch_size=1000):
+    batch_idx = index // batch_size
+    row_index = index % batch_size
+    local_file = f"cosine_batches/cosine_batch_{batch_idx}.npy"
+
+    file_id = cosine_drive_ids.get(batch_idx)
+    if file_id:
+        download_cosine_batch_from_drive(file_id, local_file)
+        return np.load(local_file)[row_index]
+    else:
+        st.error(f"❌ Không tìm thấy file ID cho batch {batch_idx}")
+        return np.zeros(df_products.shape[0])
 # Cập nhật load_cosine_batch để tự động tải từ Google Drive nếu chưa có file local
 
 def load_cosine_batch(index, batch_size=1000):
