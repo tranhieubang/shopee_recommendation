@@ -44,9 +44,6 @@ if 'rating_x' in merged_df.columns:
 elif 'rating_y' in merged_df.columns:
     merged_df.rename(columns={'rating_y': 'rating'}, inplace=True)
 
-st.write("Cột merged_df:", merged_df.columns.tolist())
-st.write("5 dòng đầu merged_df:", merged_df.head())
-
 # Chuẩn bị dữ liệu cho EDA
 subcat_counts = df_products['sub_category'].value_counts().reset_index()
 subcat_counts.columns = ['sub_category', 'count']
@@ -369,7 +366,7 @@ if choice == "Recommendation":
     elif method == "Theo người dùng (user_id)":
         st.markdown("#### 📋 Danh sách một số người dùng mẫu")
         st.dataframe(
-        merged_df[['user_id', 'user']].drop_duplicates().head(10).reset_index(drop=True)
+        merged_df[['user_id', 'user']].drop_duplicates().head(3).reset_index(drop=True)
     )
 
         user_id_input = st.text_input("🔍 Nhập `user_id` để xem gợi ý:")
