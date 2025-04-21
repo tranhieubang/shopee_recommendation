@@ -346,6 +346,20 @@ if choice == "Recommendation":
         else:
             st.info("Hãy nhập mô tả sản phẩm để nhận gợi ý.")
 
+    elif method == "Theo người dùng (user_id)":
+        user_id_input = st.text_input("Nhập user_id để xem gợi ý:")
+        if user_id_input:
+            try:
+                user_id_int = int(user_id_input)
+                st.write(f"Hiển thị gợi ý cho người dùng: {user_id_int}")
+                recommended_by_user = get_recommendations_by_user(user_id_int)
+                if not recommended_by_user.empty:
+                    display_recommended_products(recommended_by_user)
+                else:
+                    st.info("Không tìm thấy sản phẩm gợi ý cho người dùng này.")
+            except ValueError:
+                st.error("Vui lòng nhập user_id hợp lệ (số nguyên).")
+
 elif choice == "Overview":
     st.markdown("""
     <div style='font-size:22px; line-height:1.8; font-weight: 500; text-align: justify;'>
@@ -405,20 +419,3 @@ elif choice == "Product Insights":
         st.markdown("### 💸 Phân tích giá sản phẩm")
         st.plotly_chart(fig_price_dist, use_container_width=True)
         st.plotly_chart(fig_avg_price, use_container_width=True)
-    elif method == "Theo người dùng (user_id)":
-        user_input = st.text_input("Nhập user_id để hệ thống gợi ý sản phẩm:")
-        nums = st.slider("Số lượng sản phẩm muốn đề xuất", min_value=1, max_value=10, value=3)
-
-        if user_input:
-            try:
-                user_id = int(user_input)
-                recommendations = get_recommendations_by_user(user_id, topn=nums)
-                if not recommendations.empty:
-                    st.write("##### Các sản phẩm hệ thống gợi ý cho bạn:")
-                    display_recommended_products(recommendations, cols=3)
-                else:
-                    st.info("Người dùng này chưa có đánh giá sản phẩm nào đủ để gợi ý.")
-            except ValueError:
-                st.error("Vui lòng nhập user_id là một số nguyên.")
-        else:
-            st.info("Hãy nhập user_id để xem đề xuất.")
