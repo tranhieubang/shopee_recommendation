@@ -25,6 +25,9 @@ def load_csv_from_gdrive(file_id, dest_path="products.csv"):
 file_id = "1AcAptP7UxnNxDUZZ5fJha0XmoEdL4OE3" 
 df_products = load_csv_from_gdrive(file_id)
 
+# Thêm dữ liệu đánh giá người dùng
+rating_df = pd.read_csv("/mnt/data/Products_ThoiTrangNam_rating_raw.csv")
+
 # Chuẩn bị dữ liệu cho EDA
 subcat_counts = df_products['sub_category'].value_counts().reset_index()
 subcat_counts.columns = ['sub_category', 'count']
